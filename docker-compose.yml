@@ -1,11 +1,6 @@
 version: '3.4'
 
 services:
-  portainer:
-    image: portainer/portainer
-    container_name: portainer
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   plex:
     image: ghcr.io/linuxserver/plex:bionic
     container_name: plex
@@ -27,19 +22,13 @@ services:
       - "PASS=suqta3-kYvvaw-sawzus"         # Required
       - CONNECT=Belgium
       - TECHNOLOGY=NordLynx
-      - NETWORK=192.168.1.0/24 
+      - NETWORK=192.168.0.0/24 
     ports:
       - 8080:8080
+      - 443:443
 
   torrent:
     image: linuxserver/qbittorrent
     network_mode: service:vpn
     depends_on:
       - vpn
-volumes:
-  timemachine-var-lib-samba:
-    driver: local
-  timemachine-run-samba:
-    driver: local
-  timemachine-var-cache-samba:
-    driver: local
