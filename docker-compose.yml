@@ -14,21 +14,28 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-  whoami:
-    # A container that exposes an API to show its IP address
-    image: traefik/whoami
-    labels:
-      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
-  ws:
-    image: nginx
-    labels:
-      - "traefik.http.routers.ws.rule=Host(`ws.docker.localhost`)"
     networks:
       - reverse
-  ws2:
-    image: nginx
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Europe/Amsterdam
     ports:
-      - 8081:80
+      - "1880:1880"
+    networks:
+      - reverse
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`node-red`)"
+      - "traefik.http.services.nginx.loadbalancer.server.port=1880"
+    networks:
+      - reverse
+    user: root
+    volumes:
+      - node-red-data:/data
+volumes:
+  portainer_data:
+  node-red-data:
 networks:
   reverse:
     driver: bridge
