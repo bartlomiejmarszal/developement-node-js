@@ -1,4 +1,7 @@
 FROM nodered/node-red
 
-RUN apk update \
-    && apk add --no-cache python3 py3-pip
+# Update the package lists
+RUN apt-get update
+
+# Install Python 3
+RUN apt-get install -y python3
