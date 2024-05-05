@@ -1,10 +1,12 @@
 version: '3.4'
 
 services:
-  node-app:
+  display-api:
+    build: display-api
+    container_name: "display-api"
     image: node:latest
     volumes:
-      - ./:/usr/src/app
+      - ./DisplayApi:/usr/src/app
     working_dir: /usr/src/app
     command: bash -c "npm install && npm start"
     ports:
@@ -15,7 +17,6 @@ services:
     # The official v2 Traefik docker image
     image: traefik:v2.6
     # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker
     ports:
       # The HTTP port
       # The Web UI (enabled by --api.insecure=true)
