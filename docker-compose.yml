@@ -1,6 +1,16 @@
 version: '3.4'
 
 services:
+  node-app:
+    image: node:latest
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app
+    command: bash -c "npm install && npm start"
+    ports:
+      - "3000:3000"
+    networks:
+      - reverse
   reverse-proxy:
     # The official v2 Traefik docker image
     image: traefik:v2.6
@@ -31,8 +41,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.nginx.rule=Host(`node-red`)"
       - "traefik.http.services.nginx.loadbalancer.server.port=1880"
-    networks:
-      - reverse
     user: root
     restart: unless-stopped
     volumes:
@@ -58,6 +66,7 @@ services:
         hard: -1
     volumes:
       - esdata1:/usr/share/elasticsearch/data
+  
 volumes:
    esdata1:
     driver: local
