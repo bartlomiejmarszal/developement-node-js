@@ -6,7 +6,7 @@ services:
     container_name: "display-api"
     image: node:latest
     volumes:
-      - ./display-api:/usr/src/app
+      - ./display-api:/usr/src/app:cached
     working_dir: /usr/src/app
     ports:
       - "3000:3000"
