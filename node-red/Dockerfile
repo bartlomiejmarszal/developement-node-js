@@ -1,7 +1,10 @@
 FROM nodered/node-red
 
-# Update the package lists
-RUN apt-get update
+# Install Node-RED
+RUN npm install -g --unsafe-perm node-red
 
-# Install Python 3
-RUN apt-get install -y python3
+# Verify Python 3 is installed
+RUN python3 --version
+
+# Verify Node-RED is installed
+RUN node-red --version
