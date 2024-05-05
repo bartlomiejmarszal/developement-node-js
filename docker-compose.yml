@@ -8,7 +8,6 @@ services:
     command: --api.insecure=true --providers.docker
     ports:
       # The HTTP port
-      - "80:80"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
     volumes:
@@ -37,7 +36,7 @@ services:
     user: root
     restart: unless-stopped
     volumes:
-      - node-red-data:/data
+      - ./node-red-data:/data
   redis:
     image: "redis:latest"
     ports:
@@ -59,10 +58,9 @@ services:
         hard: -1
     volumes:
       - esdata1:/usr/share/elasticsearch/data
-  esdata1:
+volumes:
+   esdata1:
     driver: local
-  portainer_data:
-  node-red-data:
 networks:
   reverse:
     driver: bridge
