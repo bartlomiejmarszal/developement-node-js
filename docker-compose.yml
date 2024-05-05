@@ -16,10 +16,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - reverse
+    restart: unless-stopped
   node-red:
     image: nodered/node-red:latest
     environment:
       - TZ=Europe/Amsterdam
+    build:
+      context: ./node-red
+    privileged: true
     ports:
       - "1880:1880"
     networks:
@@ -31,9 +35,32 @@ services:
     networks:
       - reverse
     user: root
+    restart: unless-stopped
     volumes:
       - node-red-data:/data
-volumes:
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    networks:
+      - reverse
+  elasticsearch:
+    platform: "linux/${ARCH:-amd64}"
+    image: elasticsearch:8.3.2
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+  esdata1:
+    driver: local
   portainer_data:
   node-red-data:
 networks:
