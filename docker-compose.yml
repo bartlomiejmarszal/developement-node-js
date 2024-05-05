@@ -27,25 +27,6 @@ services:
     networks:
       - reverse
     restart: unless-stopped
-  node-red:
-    image: nodered/node-red:latest
-    environment:
-      - TZ=Europe/Amsterdam
-    build:
-      context: ./node-red
-    privileged: true
-    ports:
-      - "1880:1880"
-    networks:
-      - reverse
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.nginx.rule=Host(`node-red`)"
-      - "traefik.http.services.nginx.loadbalancer.server.port=1880"
-    user: root
-    restart: unless-stopped
-    volumes:
-      - ./node-red-data:/data
   redis:
     image: "redis:latest"
     ports:
